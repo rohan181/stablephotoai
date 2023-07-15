@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+      <!-- Gallery -->
+<div class="row">
+    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Boat on Calm Water"
+      />
+  
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Wintry Mountain Landscape"
+      />
+    </div>
+  
+    <div class="col-lg-4 mb-4 mb-lg-0">
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Mountains in the Clouds"
+      />
+  
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Boat on Calm Water"
+      />
+    </div>
+  
+    <div class="col-lg-4 mb-4 mb-lg-0">
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Waves at Sea"
+      />
+  
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
+        class="w-100 shadow-1-strong rounded mb-4"
+        alt="Yosemite National Park"
+      />
+    </div>
+  </div>
+
+
+  <script>
+    window.onload = function() {
+        var imageUrl = "https://cdn.stablediffusionapi.com/generations/0-573264ff-2aeb-40b4-b06d-c58d8eae6e95.png";
+        
+        var img = document.createElement("img");
+        img.src = imageUrl;
+        
+        document.body.appendChild(img);
+    };
+
+
+
+
+    const url = "https://stablediffusionapi.com/api/v4/dreambooth";
+    var modelId = '{{ modelid }}';
+    var user =  '{{ user }}'
+    console.log(modelId)
+    const payload = JSON.stringify({
+  key: "KhwsDivKGA4dhHDlbZQcVeGojvjTjIMNCebIV6iImfvgWPHpyW0E8ZWAjK33",
+
+  model_id: modelId,
+  prompt: "abir_rohan18114 person,ed:1.15),shiny glitter party dress,whole full body,detailed high end fashion,formal dress,natural light, sharp, detailed face, magazine, photo, canon, nikon, focus, award winning photo,reminiscent of the works of Steve McCurry, 35mm, F/2.8, insanely detailed and intricate, character, hypermaximalist, elegant, ornate, hyper realistic, super detailed, trending on flickr, portrait photo,masterpiece,beach background,full body, best quality, high resolution, 8K , HDR, bloom, sun light, raytracing , detailed shadows, intricate tree shadow, bokeh, depth of field, film photography, film grain, glare, (wind:0.8), detailed hair, beautiful face, beautiful man, ultra detailed eyes, cinematic lighting, (hyperdetailed:1.15), outdoors,happy face,,ultra-realistic,clear facial features,natural features,captured with a phase one 35mm lens,f/ 3.2,agfa vista film ,film grain light,global illumination,intricate detail,wide shot,--upbeta --ar 4:5 --s 750 --q 2",
+  negative_prompt: "(worst quality:2.00), (low quality:2.00), (normal quality:2.00), low-res,deformed face,(deformed iris, deformed pupils, semi-realistic, CGI, 3D, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, JPEG artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck,blurry background,dslr,portrait,dark face,dark eye,make up,fat face, easynegative,flat face,red skin,bad skin, wrinkles, pustules",
+  width: "512",
+  height: "512",
+  samples: "1",
+  num_inference_steps: "30",
+  safety_checker: "no",
+  enhance_prompt: "yes",
+  seed: null,
+  guidance_scale: 7.5,
+  multi_lingual: "no",
+  panorama: "no",
+  self_attention: "no",
+  upscale: "no",
+  embeddings_model: null,
+  lora_model: null,
+  scheduler: "UniPCMultistepScheduler",
+  webhook: null,
+  track_id: null
+});
+
+const sendPostRequest = async () => {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: payload,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    const data = await response.json();
+    console.log(data)
+    const dataa = {
+      "user": user,
+  "modelid": modelId,
+  "image": data.output
+  // Other data properties
+};
+    
+
+fetch(`/useritemstore`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    'X-CSRFToken': '{{ csrf_token }}',
+  },
+  body: JSON.stringify(dataa),
+})
+  .then((response) => response.json())
+  .then((responseData) => {
+    console.log("Response:", responseData);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+    
+    return data;
+    
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+const sendMultipleRequests = async (count) => {
+  const requestPromises = [];
+  for (let i = 0; i < count; i++) {
+    requestPromises.push(sendPostRequest());
+  }
+  await Promise.all(requestPromises);
+  console.log('All requests completed.');
+};
+
+
+
+
+
+
+
+
+
+sendMultipleRequests(1);
+
+
+
+
+
+</script>
+  <!-- Gallery -->
+    {% endblock %}
