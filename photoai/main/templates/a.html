@@ -3,62 +3,47 @@
 
 {% block content %}
       <!-- Gallery -->
-<div class="row">
-    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
-      <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Boat on Calm Water"
-      />
-  
-      <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Wintry Mountain Landscape"
-      />
-    </div>
-  
-    <div class="col-lg-4 mb-4 mb-lg-0">
-      <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Mountains in the Clouds"
-      />
-  
-      <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Boat on Calm Water"
-      />
-    </div>
-  
-    <div class="col-lg-4 mb-4 mb-lg-0">
-      <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Waves at Sea"
-      />
-  
-      <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
-        class="w-100 shadow-1-strong rounded mb-4"
-        alt="Yosemite National Park"
-      />
-    </div>
-  </div>
 
-
-  <script>
-    window.onload = function() {
-        var imageUrl = "https://cdn.stablediffusionapi.com/generations/0-573264ff-2aeb-40b4-b06d-c58d8eae6e95.png";
-        
-        var img = document.createElement("img");
-        img.src = imageUrl;
-        
-        document.body.appendChild(img);
-    };
-
-
+      <div>
+        <div id="image-container">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Yosemite National Park"
+          />
+        </div>
+      </div>
+      
+      <script>
+        window.onload = function() {
+          fetch(`/useritemshow`)
+            .then(response => response.json())
+            .then(data => {
+              var userItems = data.user_items;
+      
+              var imageContainer = document.getElementById("image-container");
+      
+              userItems.forEach(function(userItem) {
+                var imageUrlsString = userItem.image;
+                var imageUrls = JSON.parse(imageUrlsString.replace(/'/g, '"'));
+      
+                if (Array.isArray(imageUrls)) {
+                  imageUrls.forEach(function(imageUrl) {
+                    if (imageUrl !== "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp") {
+                      var img = document.createElement("img");
+                      img.src = imageUrl;
+                      imageContainer.appendChild(img);
+                    }
+                  });
+                } else {
+                  console.log("The imageUrls variable is not an array.");
+                }
+              });
+            })
+            .catch(error => console.log(error));
+        };
+      
+      
 
 
     const url = "https://stablediffusionapi.com/api/v4/dreambooth";
