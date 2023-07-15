@@ -4,15 +4,42 @@
 {% block content %}
       <!-- Gallery -->
 
-      <div>
-        <div id="image-container">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
-            class="w-100 shadow-1-strong rounded mb-4"
-            alt="Yosemite National Park"
-          />
-        </div>
+      <div class="container">
+        <div id="image-container" class="row"></div>
       </div>
+      
+      <style>
+        .row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+        }
+      
+        .col-md-3 {
+          flex-basis: 25%;
+          max-width: 25%;
+          padding: 8px;
+          position: relative;
+        }
+      
+        .img-fluid {
+          max-width: 100%;
+          height: auto;
+        }
+      
+        .download-button {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background-color: #ffffff;
+          padding: 4px 8px;
+          border: none;
+          border-radius: 4px;
+          font-size: 14px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      </style>
       
       <script>
         window.onload = function() {
@@ -28,12 +55,25 @@
                 var imageUrls = JSON.parse(imageUrlsString.replace(/'/g, '"'));
       
                 if (Array.isArray(imageUrls)) {
-                  imageUrls.forEach(function(imageUrl) {
-                    if (imageUrl !== "https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp") {
-                      var img = document.createElement("img");
-                      img.src = imageUrl;
-                      imageContainer.appendChild(img);
-                    }
+                  imageUrls.forEach(function(imageUrl, index) {
+                    var colDiv = document.createElement("div");
+                    colDiv.className = "col-md-3";
+      
+                    var img = document.createElement("img");
+                    img.src = imageUrl;
+                    img.classList.add("img-fluid", "shadow-1-strong", "rounded", "mb-4");
+                    img.alt = "Image";
+      
+                    var downloadButton = document.createElement("button");
+                    downloadButton.className = "download-button";
+                    downloadButton.innerText = "Download";
+                    downloadButton.addEventListener("click", function() {
+                      downloadImage(imageUrl);
+                    });
+      
+                    colDiv.appendChild(img);
+                    colDiv.appendChild(downloadButton);
+                    imageContainer.appendChild(colDiv);
                   });
                 } else {
                   console.log("The imageUrls variable is not an array.");
@@ -42,6 +82,16 @@
             })
             .catch(error => console.log(error));
         };
+      
+        function downloadImage(url) {
+          var link = document.createElement("a");
+          link.href = url;
+          link.download = "image.jpg";
+          link.style.display = "none";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       
       
 
