@@ -61,6 +61,35 @@
     }
 
 
+
+    form-group {
+    margin-bottom: 15px;
+  }
+
+  /* Styling for the label */
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: white; /* Label text color */
+  }
+
+  /* Styling for the input field */
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #2b2b2b; /* Black background color for the input field */
+    color: white; /* Text color in the input field */
+  }
+
+  /* Optional: Placeholder text color for modern browsers */
+  ::placeholder {
+    color: #ccc;
+  }
+
+
     .loading-animation {
   display: none;
   position: fixed;
@@ -108,7 +137,7 @@ var modelId = '{{ modelid }}';
       const imageNumber = document.getElementById("imageNumber").value;
       const imageType = document.getElementById("imageType").value;
 
-
+      const ownPromptInput = document.getElementById('ownPrompt');
       
    
     const dressColor = document.getElementById('dressColor').value;
@@ -122,8 +151,16 @@ var modelId = '{{ modelid }}';
       const url = "https://stablediffusionapi.com/api/v4/dreambooth";
     var modelId = '{{ modelid }}';
     var user =  '{{ user }}';
-    console.log(modelId);
+   
+    const ownPromptValue = ownPromptInput.value;
 
+
+   
+    // If the ownPromptValue is empty (contains only spaces or nothing)
+    console.log("Own Prompt is empty.");
+    // Add your code or actions when the text field is empty
+  
+  if (ownPromptValue.trim() === "") {
     if (time === "night") {
       var string5 = ""+dressColor +" " + imageType+ + "," + lighting + "," + windCondition + "," + locationType + "," + place + "," + "," + emotion;
       var string4 = "abir_rohan1811 person,night photography,city night,neon light,"+string5 +"half body,detail face ,road light,street night,detailed, sharp, detailed face, magazine, photo, canon, nikon, focus, award winning photo,reminiscent of the works of Mario Testino, 35mm, F/2.8, insanely detailed and intricate, character, hypermaximalist, elegant, ornate, hyper realistic, super detailed, trending on flickr,masterpiece,fresh background,full body, best quality, high resolution, 8K UHD , HDR, bloom, sun light, raytracing , detailed shadows, intricate tree shadow, bokeh, depth of field, film photography, film grain, glare, (wind:0.8), detailed hair, beautiful face, ultra detailed eyes, cinematic lighting, (hyperdetailed:1.15), outdoors,happy face,ultra-realistic,clear facial features,natural features,captured with a phase one 35mm lens,f/ 3.2,agfa vista film ,film grain light,global illumination,intricate detail,wide shot,--upbeta --ar 4:5 --s 750 --q 2,natural lighting,RTX, professionally color graded, professional photography,fashion, high fashion, haute couture, add a touch of happiness to the scene dof, V4"
@@ -140,7 +177,13 @@ var string5 = ","+time +","+ dressColor +" "+ imageType+ "," + lighting + "," + 
 var string4 = "abir_rohan1811 person,ed:1.15)" +  string5 + "detailed, sharp, detailed face, magazine, photo, canon, nikon, focus, award winning photo,reminiscent of the works of Mario Testino, 35mm, F/2.8, insanely detailed and intricate, character, hypermaximalist, elegant, ornate, hyper realistic, super detailed, trending on flickr,masterpiece,fresh background,full body, best quality, high resolution, 8K UHD , HDR, bloom, sun light, raytracing , detailed shadows, intricate tree shadow, bokeh, depth of field, film photography, film grain, glare, (wind:0.8), detailed hair, beautiful face, ultra detailed eyes, cinematic lighting, (hyperdetailed:1.15), outdoors,happy face,ultra-realistic,clear facial features,natural features,captured with a phase one 35mm lens,f/ 3.2,agfa vista film ,film grain light,global illumination,intricate detail,wide shot,--upbeta --ar 4:5 --s 750 --q 2,natural lighting,RTX, professionally color graded, professional photography,fashion, high fashion, haute couture, add a touch of happiness to the scene dof, V4"
 }
 
+  }
 
+  else {
+    // If the ownPromptValue is not empty
+    string4= "abir_rohan1811 person,ed:1.15)" +ownPromptValue;
+    // Add your code or actions when the text field is not empty
+  }
 
 
     
@@ -273,12 +316,99 @@ sendMultipleRequests(imageNumber);
       <div class="form-group">
         <label for="imageType">Outfit Type:</label>
         <select id="imageType">
-          <option value="formal dress">FORMAL</option>
-          <option value="casual dress">CASUAL</option>
-          <option value="suit dress">SUIT</option>
-          <option value="semi formal dress">semiformal</option>
-          <option value="t-shirt dress">Tshirt</option>
-          <option value="party dress">Party dress</option>
+          <option value="formal dress">Formal Dress</option>
+          <option value="casual dress">Casual Dress</option>
+          <option value="suit dress">Suit Dress</option>
+          <option value="semi formal dress">Semi Formal Dress</option>
+          <option value="t-shirt dress">T-Shirt Dress</option>
+          <option value="party dress">Party Dress</option>
+          <option value="cocktail dress">Cocktail Dress</option>
+          <option value="ballgown">Ballgown</option>
+          <option value="maxi dress">Maxi Dress</option>
+          <option value="a-line dress">A-Line Dress</option>
+          <option value="sheath dress">Sheath Dress</option>
+          <option value="empire waist dress">Empire Waist Dress</option>
+          <option value="shift dress">Shift Dress</option>
+          <option value="wrap dress">Wrap Dress</option>
+          <option value="peplum dress">Peplum Dress</option>
+          <option value="skater dress">Skater Dress</option>
+          <option value="midi dress">Midi Dress</option>
+          <option value="bodycon dress">Bodycon Dress</option>
+          <option value="sundress">Sundress</option>
+          <option value="shirt dress">Shirt Dress</option>
+          <option value="denim dress">Denim Dress</option>
+          <option value="off-shoulder dress">Off-Shoulder Dress</option>
+          <option value="halter neck dress">Halter Neck Dress</option>
+          <option value="peasant dress">Peasant Dress</option>
+          <option value="kimono dress">Kimono Dress</option>
+          <option value="fit and flare dress">Fit and Flare Dress</option>
+          <option value="mermaid dress">Mermaid Dress</option>
+          <option value="one-shoulder dress">One-Shoulder Dress</option>
+          <option value="high-low dress">High-Low Dress</option>
+          <option value="tiered dress">Tiered Dress</option>
+          <option value="balloon dress">Balloon Dress</option>
+          <option value="babydoll dress">Babydoll Dress</option>
+          <option value="flapper dress">Flapper Dress</option>
+          <option value="bandage dress">Bandage Dress</option>
+          <option value="grecian dress">Grecian Dress</option>
+          <option value="jumpsuit dress">Jumpsuit Dress</option>
+          <option value="cut-out dress">Cut-Out Dress</option>
+          <option value="ruched dress">Ruched Dress</option>
+          <option value="sequin dress">Sequin Dress</option>
+          <option value="asymmetrical dress">Asymmetrical Dress</option>
+          <option value="empire dress">Empire Dress</option>
+          <option value="pleated dress">Pleated Dress</option>
+          <option value="ruffle dress">Ruffle Dress</option>
+          <option value="cape dress">Cape Dress</option>
+          <option value="tulle dress">Tulle Dress</option>
+          <option value="boho dress">Boho Dress</option>
+          <option value="vintage dress">Vintage Dress</option>
+          <option value="fringe dress">Fringe Dress</option>
+          <option value="military dress">Military Dress</option>
+          <option value="cami dress">Cami Dress</option>
+          <option value="pinafore dress">Pinafore Dress</option>
+          <option value="cold shoulder dress">Cold Shoulder Dress</option>
+          <option value="corset dress">Corset Dress</option>
+          <option value="collared dress">Collared Dress</option>
+          <option value="prairie dress">Prairie Dress</option>
+          <option value="overall dress">Overall Dress</option>
+          <option value="blouson dress">Blouson Dress</option>
+          <option value="palazzo dress">Palazzo Dress</option>
+          <option value="cowl neck dress">Cowl Neck Dress</option>
+          <option value="trench dress">Trench Dress</option>
+          <option value="cargo dress">Cargo Dress</option>
+          <option value="salwar dress">Salwar Dress</option>
+          <option value="abaya dress">Abaya Dress</option>
+          <option value="dashiki dress">Dashiki Dress</option>
+          <option value="caftan dress">Caftan Dress</option>
+          <option value="qipao dress">Qipao Dress</option>
+          <option value="sari dress">Sari Dress</option>
+          <option value="dirndl dress">Dirndl Dress</option>
+          <option value="hmong dress">Hmong Dress</option>
+          <option value="kente dress">Kente Dress</option>
+          <option value="cheongsam dress">Cheongsam Dress</option>
+          <option value="thobe dress">Thobe Dress</option>
+          <option value="hanbok dress">Hanbok Dress</option>
+          <option value="kurta dress">Kurta Dress</option>
+          <option value="kaftan dress">Kaftan Dress</option>
+          <option value="maori dress">Maori Dress</option>
+          <option value="baju kurung dress">Baju Kurung Dress</option>
+          <option value="kebaya dress">Kebaya Dress</option>
+          <option value="hanfu dress">Hanfu Dress</option>
+          <option value="ao dai dress">Ao Dai Dress</option>
+          <option value="lehenga dress">Lehenga Dress</option>
+          <option value="kimonotoga dress">Kimono Toga Dress</option>
+          <option value="flapper dress">Flapper Dress</option>
+          <option value="teddy dress">Teddy Dress</option>
+          <option value="scuba dress">Scuba Dress</option>
+          <option value="prairie dress">Prairie Dress</option>
+          <option value="lingerie dress">Lingerie Dress</option>
+          <option value="loungewear dress">Loungewear Dress</option>
+          <option value="gypsy dress">Gypsy Dress</option>
+          <option value="bell sleeve dress">Bell Sleeve Dress</option>
+          <option value="princess dress">Princess Dress</option>
+          <option value="smock dress">Smock Dress</option>
+          <option value="poncho dress">Poncho Dress</option>
         </select>
       </div>
 
@@ -327,20 +457,7 @@ sendMultipleRequests(imageNumber);
         </select>
       </div>
     
-      <!-- Lighting -->
-      <div class="form-group">
-        <label for="lighting">Lighting:</label>
-        <select id="lighting">
-          <option value="natural">Natural Light</option>
-          <option value="studio">Studio Light</option>
-          <option value="ambient">Ambient Light</option>
-          <option value="flash">Flash Light</option>
-          <option value="backlight">Backlight</option>
-          <option value="candle">Candle Light</option>
-          <option value="dusk">Dusk Light</option>
-          <option value="overhead">Overhead Light</option>
-        </select>
-      </div>
+      
     
       <!-- Emotion -->
       <div class="form-group">
@@ -409,6 +526,9 @@ sendMultipleRequests(imageNumber);
         <label for="ownPrompt">Own Prompt:</label>
         <input type="text" id="ownPrompt" placeholder="Enter your own prompt">
       </div>
+
+
+     
       
       
       
