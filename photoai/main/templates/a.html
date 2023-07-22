@@ -52,6 +52,7 @@
       
               userItems.forEach(function(userItem) {
                 var imageUrlsString = userItem.image;
+                console.log(imageUrlsString);
                 var imageUrls = JSON.parse(imageUrlsString.replace(/'/g, '"'));
       
                 if (Array.isArray(imageUrls)) {
@@ -70,7 +71,7 @@
                     downloadButton.addEventListener("click", function() {
                       downloadImage(imageUrl);
                     });
-      
+                    
                     colDiv.appendChild(img);
                     colDiv.appendChild(downloadButton);
                     imageContainer.appendChild(colDiv);
@@ -185,7 +186,6 @@ const sendMultipleRequests = async (count) => {
 
 
 
-sendMultipleRequests(1);
 
 
 

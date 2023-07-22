@@ -9,7 +9,7 @@ from django.contrib import admin
 # 
 # from import_export.admin import ImportExportModelAdmin
 
-from .models import UserItem
+from .models import UserItem,Userprofile
 
 
 
@@ -20,3 +20,4 @@ from .models import UserItem
 #admin.site.register(Product,OrderAdmin)
 
 admin.site.register(UserItem)
+admin.site.register(Userprofile)

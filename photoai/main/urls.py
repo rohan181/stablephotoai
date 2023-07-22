@@ -5,7 +5,8 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("image", views.image, name="image"),
+    path("photoview", views.photoview, name="photoview"),
+    #path("image", views.image, name="image"),
     path("useritemstore", views.create_user_item, name="createuser"),
     path('useritemshow', views.retrieve_user_items, name='user_items'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
