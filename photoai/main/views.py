@@ -27,7 +27,7 @@ def index(request):
 @login_required
 def photoview(request):
     user = request.user
-    user_item = UserItem.objects.filter(user=user).first()  # Retrieve the UserItem object related to the current user
+    user_item = UserItem.objects.filter(user=user).order_by('-id').first() # Retrieve the UserItem object related to the current user
     context = {
         'user': user,
         'modelid': user_item.modelid if user_item else None,
@@ -97,8 +97,8 @@ def image(request):
 
 
 def retrieve_user_items(request):
-    user = request.user  # Assuming the request includes an authenticated user
-    user_items = UserItem.objects.filter(user=user)
+    user = request.user
+    user_items = UserItem.objects.filter(user=user).order_by('-id')   
     data = {
         'user_items': list(user_items.values())
     }
