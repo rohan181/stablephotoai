@@ -15,4 +15,5 @@ urlpatterns = [
         LoginView.as_view(template_name='login.html'),
         name='login'
     ),
+    path('upload/', views.upload_photos, name='upload_photos'),
 ]

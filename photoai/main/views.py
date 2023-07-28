@@ -4,9 +4,11 @@ from rest_framework.decorators import api_view
 from django.contrib.auth.decorators import login_required
 import requests
 import json
-from .models import UserItem, Userprofile
+from .models import UserItem, Userprofile,Photo
 from django.http import HttpResponse
 from rest_framework.response import Response
+from django.shortcuts import render, redirect
+from .forms import PhotoUploadForm
 
 from django.http import JsonResponse
 
@@ -103,3 +105,23 @@ def retrieve_user_items(request):
         'user_items': list(user_items.values())
     }
     return JsonResponse(data)
+
+
+
+def upload_photos(request):
+    if request.method == 'POST':
+        form = PhotoUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = request.user  # Assuming you have authentication in place
+            image_count = Photo.objects.filter(user=user).count()
+            if image_count < 20:
+                form.instance.user = user
+                form.save()
+            else:
+                # Display an error message or handle the limit of 20 photos per user.
+                pass
+
+    else:
+        form = PhotoUploadForm()
+
+    return render(request, 'upload_photos.html', {'form': form})
