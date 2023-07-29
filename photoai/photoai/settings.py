@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from google.oauth2 import service_account
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,13 +124,30 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = '/media/'  
+#MEDIA_URL = '/media/'  
   
 # Path where media is stored  
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')  
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')  
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+GS_BUCKET_NAME = 'photoairohan'
+GS_PROJECT_ID = 'festive-zoo-393116'
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'credential.json')
+)
+GS_AUTO_CREATE_BUCKET = True  # Creates the bucket if it doesn't exist
+ # Set the default permissions for uploaded files
+
+# Use Google Cloud Storage for static and media files
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+
+
+MEDIA_ROOT = "media/"
+UPLOAD_ROOT = 'media/uploads/'
+MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
