@@ -9,13 +9,22 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from django.shortcuts import render, redirect
 from .forms import PhotoUploadForm
-
+from io import BytesIO
 from django.http import JsonResponse
+from PIL import Image, ImageOps
+import tempfile
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.shortcuts import get_object_or_404
+import uuid
+import requests
+import json
+
+
 
 @login_required
 def index(request):
     user = request.user
-    user_item =  Userprofile.objects.filter(user=user).first()  # Retrieve the UserItem object related to the current user
+    user_item =  Userprofile.objects.filter(user=user).first()  # Retrieve the prfile object related to the current user
     context = {
         'user': user,
         'modelid': user_item.modelid if user_item else None,
@@ -29,7 +38,7 @@ def index(request):
 @login_required
 def photoview(request):
     user = request.user
-    user_item = UserItem.objects.filter(user=user).order_by('-id').first() # Retrieve the UserItem object related to the current user
+    user_item = Userprofile.objects.filter(user=user).order_by('-id').first() # Retrieve the UserItem object related to the current user
     context = {
         'user': user,
         'modelid': user_item.modelid if user_item else None,
@@ -104,24 +113,156 @@ def retrieve_user_items(request):
     data = {
         'user_items': list(user_items.values())
     }
+
+
+
+    user_items = Photo.objects.filter(user=request.user).order_by('-id')
+    image_urls = [item.image.url for item in user_items]
+
+# Convert image URLs to the desired format
+    formatted_images = []
+    for url in image_urls:
+        formatted_images.append(url)   
+
+
+    print(formatted_images)
+    
+
+# If you want to add the "images" key to the output, you can create a dictionary
+   
+
+
     return JsonResponse(data)
+
+
+
+
+def resize_image(image, username, max_size=(512, 512)):
+    # Open the image using PIL to get an Image object that supports getexif()
+    img = Image.open(image)
+
+    # Rotate the image according to the Exif orientation tag
+    img = ImageOps.exif_transpose(img)
+
+    # Calculate the new size while maintaining the aspect ratio
+    width, height = img.size
+    max_dim = max(width, height)
+
+    # Calculate the new dimensions
+    new_width = int(max_size[0] * width / max_dim)
+    new_height = int(max_size[1] * height / max_dim)
+
+    # Resize the image without rotating
+    img = img.resize((new_width, new_height), Image.LANCZOS)
+
+    # Create a new BytesIO object to store the resized image data
+    output_io = BytesIO()
+
+    # Save the resized image to the BytesIO object in PNG format
+    img.save(output_io, format='png')
+
+    # Generate a unique identifier
+    unique_id = uuid.uuid4().hex
+
+    # Concatenate the username and the unique identifier to form the new filename
+    new_filename = f"{username}_{unique_id}.png"
+
+    # Create an InMemoryUploadedFile from the BytesIO data with the new filename
+    image_file = InMemoryUploadedFile(
+        output_io, None, new_filename, 'image/png', output_io.getbuffer().nbytes, None
+    )
+
+    return image_file
 
 
 
 def upload_photos(request):
     if request.method == 'POST':
-        form = PhotoUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = request.user  # Assuming you have authentication in place
-            image_count = Photo.objects.filter(user=user).count()
-            if image_count < 20:
-                form.instance.user = user
-                form.save()
-            else:
-                # Display an error message or handle the limit of 20 photos per user.
-                pass
+        images = request.FILES.getlist('images')
+        selected_gender = request.POST.get('gender') 
+        username = request.user.username
 
-    else:
-        form = PhotoUploadForm()
+        for image in images:
+            # Resize the image before creating the Photo object
+            resized_image = resize_image(image, username)
 
-    return render(request, 'upload_photos.html', {'form': form})
+            # Create a Photo object without saving it to the database yet
+            photo = Photo(
+                user=request.user,
+                image=resized_image,
+            )
+
+            # Save the Photo object to the database
+            photo.save()
+
+        user_items = Photo.objects.filter(user=request.user).order_by('-id')
+        image_urls = [item.image.url for item in user_items]
+
+# Convert image URLs to the desired format
+        formatted_images = []
+        for url in image_urls:
+            formatted_images.append(url)    
+
+
+        
+
+        url = "https://stablediffusionapi.com/api/v3/fine_tune_v2"
+
+        payload = json.dumps({
+        "key": "KhwsDivKGA4dhHDlbZQcVeGojvjTjIMNCebIV6iImfvgWPHpyW0E8ZWAjK33",
+        "instance_prompt": "photo of abir_rohan1811",
+        "class_prompt": "photo of person",
+        "base_model_id": "realistic-vision-v13",
+         "images": formatted_images,
+        "seed": "0",
+  "training_type": selected_gender ,
+  "learning_rate_unet": "2e-6",
+  "steps_unet": "1500",
+  "learning_rate_text_encoder": "1e-6",
+  "steps_text_encoder": "350",
+  "webhook": ""
+})
+
+        headers = {
+        'Content-Type': 'application/json'
+        }
+
+        
+        response = requests.request("POST", url, headers=headers, data=payload)
+        response_dict = json.loads(response.text)
+        modelid=response_dict["model_id"]
+
+        
+       
+        
+        user_item = get_object_or_404(Userprofile, user=request.user)
+        user_item.modelid = modelid
+      
+# Update the modelid attribute
+        
+
+        user_item.save()
+
+
+
+    return render(request, 'upload_photos.html')
+   
+
+  
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
