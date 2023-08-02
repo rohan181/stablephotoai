@@ -18,6 +18,7 @@ from django.shortcuts import get_object_or_404
 import uuid
 import requests
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -246,6 +247,94 @@ def upload_photos(request):
 
 
     return render(request, 'upload_photos.html')
+
+
+@csrf_exempt
+def proxy_view(request):
+   if request.method == 'POST':
+        target_url = "https://stablediffusionapi.com/api/v4/dreambooth" # Replace with your target API URL
+
+        try:
+            # Forward the incoming request to the target API
+            response = requests.post(target_url, data=request.body, headers={'Content-Type': 'application/json'})
+
+            # Get the JSON response from the target API
+            response_data = response.json()
+
+            # Send the JSON response back to the client-side application
+            return JsonResponse(response_data)
+
+        except requests.exceptions.JSONDecodeError as e:
+            # If there was an error parsing the JSON response from the target API
+            return JsonResponse({'error': str(e)}, status=500)
+
+   return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+
+
+
+
+
+@login_required
+def allpackges(request):
+    
+
+
+    return render(request, 'all_pakages.html')
+
+
+
+
+
+@login_required
+def packege1(request):
+    user = request.user
+    user_item =  Userprofile.objects.filter(user=user).first()  # Retrieve the prfile object related to the current user
+    context = {
+        'user': user,
+        'modelid': user_item.modelid if user_item else None,
+        'image': user_item.image if user_item else None,
+    }
+
+
+    return render(request, 'packege1.html',context)
+
+
+
+@login_required
+def packege2(request):
+    user = request.user
+    user_item =  Userprofile.objects.filter(user=user).first()  # Retrieve the prfile object related to the current user
+    context = {
+        'user': user,
+        'modelid': user_item.modelid if user_item else None,
+        'image': user_item.image if user_item else None,
+    }
+
+
+    return render(request, 'packege2.html',context)
+
+
+@login_required
+def packege3(request):
+    user = request.user
+    user_item =  Userprofile.objects.filter(user=user).first()  # Retrieve the prfile object related to the current user
+    context = {
+        'user': user,
+        'modelid': user_item.modelid if user_item else None,
+        'image': user_item.image if user_item else None,
+    }
+
+
+    return render(request, 'packege3.html',context)
+
+
+
+
+
+
+
    
 
   

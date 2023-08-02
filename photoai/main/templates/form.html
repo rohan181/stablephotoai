@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load widget_tweaks %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Black Theme Example</title>
+{% block content %}
   <style>
     body {
       background-color: #1c1c1c;
@@ -137,7 +134,7 @@
 
 
       <div class="form-group">
-        <label for="imageType">Outfit Type:</label>
+        <label for="imageType">Female Outfit Type:</label>
         <select id="imageType">
           <option value="formal dress">Formal Dress</option>
           <option value="casual dress">Casual Dress</option>
@@ -232,6 +229,48 @@
           <option value="princess dress">Princess Dress</option>
           <option value="smock dress">Smock Dress</option>
           <option value="poncho dress">Poncho Dress</option>
+        </select>
+      </div>
+
+
+
+      <div class="form-group">
+        <label for="maleOutfitType">Male Outfit Type:</label>
+        <select id="maleOutfitType">
+          <!-- Existing options -->
+          <option value="denim shirt and chinos">Denim Shirt and Chinos</option>
+          <option value="casual blazer and jeans">Casual Blazer and Jeans</option>
+          <option value="polo shirt and khakis">Polo Shirt and Khakis</option>
+          <option value="shorts and t-shirt">Shorts and T-Shirt</option>
+          <option value="linen shirt and trousers">Linen Shirt and Trousers</option>
+          <option value="cardigan and slacks">Cardigan and Slacks</option>
+          <option value="casual hoodie and sweatpants">Casual Hoodie and Sweatpants</option>
+          <option value="button-up shirt and cargo shorts">Button-up Shirt and Cargo Shorts</option>
+          <option value="waistcoat and jeans">Waistcoat and Jeans</option>
+          <option value="v-neck sweater and chinos">V-Neck Sweater and Chinos</option>
+          <option value="casual bomber jacket and joggers">Casual Bomber Jacket and Joggers</option>
+          <option value="dress shirt and dress pants">Dress Shirt and Dress Pants</option>
+          <option value="vest and jeans">Vest and Jeans</option>
+          <option value="sweatshirt and cargo pants">Sweatshirt and Cargo Pants</option>
+          <option value="denim jacket and khaki shorts">Denim Jacket and Khaki Shorts</option>
+          <option value="casual button-up shirt and Bermuda shorts">Casual Button-up Shirt and Bermuda Shorts</option>
+          <option value="tweed blazer and slacks">Tweed Blazer and Slacks</option>
+          <option value="casual hoodie and denim shorts">Casual Hoodie and Denim Shorts</option>
+          <option value="sweater vest and dress shirt">Sweater Vest and Dress Shirt</option>
+          <option value="sweatshirt and jogger pants">Sweatshirt and Jogger Pants</option>
+          <option value="denim shirt and cargo pants">Denim Shirt and Cargo Pants</option>
+          <option value="casual bomber jacket and chinos">Casual Bomber Jacket and Chinos</option>
+          <option value="casual polo shirt and shorts">Casual Polo Shirt and Shorts</option>
+          <option value="linen blazer and dress pants">Linen Blazer and Dress Pants</option>
+          <option value="button-up shirt and twill pants">Button-up Shirt and Twill Pants</option>
+          <option value="cardigan and chino shorts">Cardigan and Chino Shorts</option>
+          <option value="v-neck sweater and tailored trousers">V-Neck Sweater and Tailored Trousers</option>
+          <option value="casual hoodie and cargo shorts">Casual Hoodie and Cargo Shorts</option>
+          <option value="denim jacket and Bermuda shorts">Denim Jacket and Bermuda Shorts</option>
+          <option value="short-sleeve button-up shirt and jeans">Short-sleeve Button-up Shirt and Jeans</option>
+          <option value="tweed vest and slacks">Tweed Vest and Slacks</option>
+          <option value="casual bomber jacket and denim shorts">Casual Bomber Jacket and Denim Shorts</option>
+          <!-- Add more male outfit options as needed -->
         </select>
       </div>
 
@@ -385,7 +424,7 @@
       event.preventDefault(); // prevent form submission
       const imageNumber = document.getElementById("imageNumber").value;
       const imageType = document.getElementById("imageType").value;
-
+      const maledress = document.getElementById("maleOutfitType").value;
       const ownPromptInput = document.getElementById('ownPrompt');
 
 
@@ -411,7 +450,7 @@
 
       if (ownPromptValue.trim() === "") {
         if (time === "night") {
-          var string5 = "" + dressColor + " " + imageType + + "," + lighting + "," + windCondition + "," + locationType + "," + place + "," + "," + emotion;
+          var string5 = "" + dressColor + "," + imageType + "," + maledress+","+ lighting + "," + windCondition + "," + locationType + "," + place + "," + "," + emotion;
           var string4 = "abir_rohan1811 person,night photography,city night,neon light," + string5 + "half body,detail face ,road light,street night,detailed, sharp, detailed face, magazine, photo, canon, nikon, focus, award winning photo,reminiscent of the works of Mario Testino, 35mm, F/2.8, insanely detailed and intricate, character, hypermaximalist, elegant, ornate, hyper realistic, super detailed, trending on flickr,masterpiece,fresh background,full body, best quality, high resolution, 8K UHD , HDR, bloom, sun light, raytracing , detailed shadows, intricate tree shadow, bokeh, depth of field, film photography, film grain, glare, (wind:0.8), detailed hair, beautiful face, ultra detailed eyes, cinematic lighting, (hyperdetailed:1.15), outdoors,happy face,ultra-realistic,clear facial features,natural features,captured with a phase one 35mm lens,f/ 3.2,agfa vista film ,film grain light,global illumination,intricate detail,wide shot,--upbeta --ar 4:5 --s 750 --q 2,natural lighting,RTX, professionally color graded, professional photography,fashion, high fashion, haute couture, add a touch of happiness to the scene dof, V4"
 
           console.log("Night condition is true.");
@@ -422,7 +461,7 @@
           var string1 = "abir_rohan1811 person,ed:1.15)";
           var string2 = "," + imageType + ",";
           var string3 = "abir_rohan1811 person,ed:1.15)" + string2 + ",detailed, sharp, detailed face, magazine, photo, canon, nikon, focus, award winning photo,reminiscent of the works of Mario Testino, 35mm, F/2.8, insanely detailed and intricate, character, hypermaximalist, elegant, ornate, hyper realistic, super detailed, trending on flickr,masterpiece,fresh background,full body, best quality, high resolution, 8K UHD , HDR, bloom, sun light, raytracing , detailed shadows, intricate tree shadow, bokeh, depth of field, film photography, film grain, glare, (wind:0.8), detailed hair, beautiful face, ultra detailed eyes, cinematic lighting, (hyperdetailed:1.15), outdoors,happy face,ultra-realistic,clear facial features,natural features,captured with a phase one 35mm lens,f/ 3.2,agfa vista film ,film grain light,global illumination,intricate detail,wide shot,--upbeta --ar 4:5 --s 750 --q 2,natural lighting,RTX, professionally color graded, professional photography,fashion, high fashion, haute couture, add a touch of happiness to the scene dof, V4";
-          var string5 = "," + time + "," + dressColor + " " + imageType + "," + lighting + "," + windCondition + "," + locationType + "," + place + "," + "," + emotion;
+          var string5 = "," + time + "," + dressColor + " " + imageType + "," + maledress+" ," +lighting + "," + windCondition + "," + locationType + "," + place + "," + "," + emotion;
           var string4 = "abir_rohan1811 person,ed:1.15)" + string5 + "detailed, sharp, detailed face, magazine, photo, canon, nikon, focus, award winning photo,reminiscent of the works of Mario Testino, 35mm, F/2.8, insanely detailed and intricate, character, hypermaximalist, elegant, ornate, hyper realistic, super detailed, trending on flickr,masterpiece,fresh background,full body, best quality, high resolution, 8K UHD , HDR, bloom, sun light, raytracing , detailed shadows, intricate tree shadow, bokeh, depth of field, film photography, film grain, glare, (wind:0.8), detailed hair, beautiful face, ultra detailed eyes, cinematic lighting, (hyperdetailed:1.15), outdoors,happy face,ultra-realistic,clear facial features,natural features,captured with a phase one 35mm lens,f/ 3.2,agfa vista film ,film grain light,global illumination,intricate detail,wide shot,--upbeta --ar 4:5 --s 750 --q 2,natural lighting,RTX, professionally color graded, professional photography,fashion, high fashion, haute couture, add a touch of happiness to the scene dof, V4"
         }
 
@@ -469,7 +508,7 @@
 
       const sendPostRequest = async () => {
         try {
-          const response = await fetch(url, {
+          const response = await fetch(`/proxy`, {
             method: 'POST',
             body: payload,
             headers: {
@@ -530,7 +569,7 @@
 
         loadingAnimation.classList.remove('show');
 
-        window.location.href = "{% url 'photoview' %}";
+      
 
       };
 
@@ -550,6 +589,4 @@
 
 
   </script>
-</body>
-
-</html>
+ {% endblock %}
